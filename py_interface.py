@@ -9,7 +9,7 @@ from vars import openai_key, notion_token, notion_database_id
 
 openai.api_key = openai_key
 
-concept = 'Python'
+concept = 'Minecraft'
 language = 'en'
 
 categorias = pd.read_csv('resources/cat.csv', header=None, index_col=0).index.tolist()
@@ -24,7 +24,7 @@ def get_completion(prompt, model="gpt-3.5-turbo", temperature=0):
     )
     return response.choices[0].message["content"]
 
-def import_wiki_page(page_name , language = 'es'):
+def import_wiki_page(page_name , language = 'en'):
 	"""Importa una página de wikipedia"""
 	wiki = wikipediaapi.Wikipedia(language)
 	page = wiki.page(page_name)
@@ -43,7 +43,7 @@ def get_summary(page_name, summary):
 	Omite información de poca relevancia.
 	Clasifíca el artículo en una de las siguientes categorías: {categorias}
 	Deriva una lista de como máximo 3 keywords principales del artículo
-	El formato de salida SIEMPRE debe ser JSON con los siguientes valores de llave:	resumen, categoria, keywords
+	El formato de salida SIEMPRE debe ser JSON con los siguientes valores de llave:	[resumen, categoria, keywords] en el ideoma original del artículo.
 	Artículo: '''{summary}'''
 	"""
 
@@ -56,9 +56,9 @@ def get_section_summary(page_name, section):
 	
 	prompt = f"""
 	Tu tarea es generar un resumen corto de una sección de un Artículo de wikipedia sobre {page_name} delimitada en triple comillas simples en no más de 40 palabras
-	Conserva el tono informativo e impersonal de la sección, y conserva el idioma original.
+	Conserva el tono informativo e impersonal de la sección.
 	Omite información de poca relevancia, no incluyas información de otras secciones.
-	El formato de salida debe ser texto plano sin comillas.
+	El formato de salida debe ser texto plano sin comillas en el ideoma original del artículo.
 	Artículo: '''{section}'''
 	"""
 
@@ -146,7 +146,7 @@ def createPage(databaseID, headers, page_name, summary, url, sections):
         ]
     }
 
-    excluded_titles = ['Referencias', 'Véase también', 'Enlaces externos', 'Notas', 'Bibliografía']
+    excluded_titles = ['Referencias', 'Véase también', 'Enlaces externos', 'Notas', 'Bibliografía', 'Notes', 'References', 'External links', 'See also', 'Further reading']
 
     for section in sections:
         if section.title not in excluded_titles:
