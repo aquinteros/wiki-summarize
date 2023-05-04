@@ -67,7 +67,7 @@ def get_section_summary(page_name, section):
 
 	return response
 
-def createPage(databaseID, headers, page_name, summary, url, sections):
+def createPage(databaseID, headers, page_name, summary, url, sections, language):
     """crea una página en una database de notion"""
     
     resumen, categoria, tags = get_summary(page_name, summary)
@@ -101,6 +101,11 @@ def createPage(databaseID, headers, page_name, summary, url, sections):
             "URL": {
                 "url": url
             },
+            "Idioma": {
+				"select": {
+					"name": str.upper(language)
+				}
+			},
             }
         }
     
@@ -195,4 +200,4 @@ headers = {
 page_name, exists, summary, url, sections = import_wiki_page(concept, language)
 
 if exists:
-    createPage(notion_database_id, headers, page_name, summary, url, sections)
+    createPage(notion_database_id, headers, page_name, summary, url, sections, language)
