@@ -1,0 +1,5 @@
+pandas
+numpy
+wikipedia-api
+notion
+openai
