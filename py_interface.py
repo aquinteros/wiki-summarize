@@ -9,7 +9,7 @@ from vars import openai_key, notion_token, notion_database_id
 
 openai.api_key = openai_key
 
-concept = 'Minecraft'
+concept = 'SQL'
 language = 'en'
 
 categorias = pd.read_csv('resources/cat.csv', header=None, index_col=0).index.tolist()
@@ -34,16 +34,16 @@ def import_wiki_page(page_name , language = 'en'):
 	sections = page.sections
 	return page_name, exists, summary, url, sections
 
-def get_summary(page_name, summary):
+def get_summary(page_name, summary, language = 'en'):
 	"""Trae summary de una página de wikipedia"""
 
 	prompt = f"""
 	Tu tarea es generar un resumen corto de un Artículo de wikipedia sobre {page_name} delimitado en triple comillas simples en no más de 40 palabras
 	Conserva el tono informativo e impersonal del artículo.
 	Omite información de poca relevancia.
-	Clasifíca el artículo en una de las siguientes categorías: {categorias}
-	Deriva una lista de como máximo 3 keywords principales del artículo
-    El idioma del output es siempre el mismo idioma que el artículo.
+	Clasifíca el artículo en una de las siguientes categorías: {categorias}.
+	Deriva una lista de como máximo 3 keywords principales del artículo.
+    El idioma del output debe ser '{language}' que es el mismo idioma del artículo.
 	El formato de salida SIEMPRE debe ser JSON con los siguientes valores de llave:	[summary, category, keywords].
 	Artículo: '''{summary}'''
 	"""
@@ -52,14 +52,14 @@ def get_summary(page_name, summary):
 
 	return response['summary'], response['category'], response['keywords']
 
-def get_section_summary(page_name, section):
+def get_section_summary(page_name, section, language = 'en'):
 	"""Trae summary de una sección de wikipedia"""
 	
 	prompt = f"""
 	Tu tarea es generar un resumen corto de una sección de un Artículo de wikipedia sobre {page_name} delimitada en triple comillas simples en no más de 40 palabras
 	Conserva el tono informativo e impersonal de la sección.
 	Omite información de poca relevancia, no incluyas información de otras secciones.
-	El formato de salida debe ser texto plano en el ideoma original del artículo.
+	El formato de salida debe ser texto plano en el idioma '{language}' que es el mismo idioma del artículo.
 	Artículo: '''{section}'''
 	"""
 
@@ -70,7 +70,7 @@ def get_section_summary(page_name, section):
 def createPage(databaseID, headers, page_name, summary, url, sections, language):
     """crea una página en una database de notion"""
     
-    resumen, categoria, tags = get_summary(page_name, summary)
+    resumen, categoria, tags = get_summary(page_name, summary, language)
     
     createUrl = 'https://api.notion.com/v1/pages'
     newPageData = {
@@ -152,7 +152,7 @@ def createPage(databaseID, headers, page_name, summary, url, sections, language)
         ]
     }
 
-    excluded_titles = ['Referencias', 'Véase también', 'Enlaces externos', 'Notas', 'Bibliografía', 'Notes', 'References', 'External links', 'See also', 'Further reading']
+    excluded_titles = ['Referencias', 'Véase también', 'Enlaces externos', 'Fuentes', 'Notas', 'Bibliografía', 'Notes', 'References', 'External links', 'See also', 'Further reading' ,'Sources']
 
     for section in sections:
         if section.title not in excluded_titles:
@@ -178,7 +178,7 @@ def createPage(databaseID, headers, page_name, summary, url, sections, language)
                             {
                                 "type": "text",
                                 "text": {
-                                    "content": get_section_summary(page_name, section.full_text)
+                                    "content": get_section_summary(page_name, section.full_text, language)
                                 }
                             }
                         ]
