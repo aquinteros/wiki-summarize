@@ -39,17 +39,18 @@ def get_summary(page_name, summary):
 
 	prompt = f"""
 	Tu tarea es generar un resumen corto de un Artículo de wikipedia sobre {page_name} delimitado en triple comillas simples en no más de 40 palabras
-	Conserva el tono informativo e impersonal del artículo, y conserva el idioma original.
+	Conserva el tono informativo e impersonal del artículo.
 	Omite información de poca relevancia.
 	Clasifíca el artículo en una de las siguientes categorías: {categorias}
 	Deriva una lista de como máximo 3 keywords principales del artículo
-	El formato de salida SIEMPRE debe ser JSON con los siguientes valores de llave:	[resumen, categoria, keywords] en el ideoma original del artículo.
+    El idioma del output es siempre el mismo idioma que el artículo.
+	El formato de salida SIEMPRE debe ser JSON con los siguientes valores de llave:	[summary, category, keywords].
 	Artículo: '''{summary}'''
 	"""
 
 	response = json.loads(get_completion(prompt))
 
-	return response['resumen'], response['categoria'], response['keywords']
+	return response['summary'], response['category'], response['keywords']
 
 def get_section_summary(page_name, section):
 	"""Trae summary de una sección de wikipedia"""
@@ -58,7 +59,7 @@ def get_section_summary(page_name, section):
 	Tu tarea es generar un resumen corto de una sección de un Artículo de wikipedia sobre {page_name} delimitada en triple comillas simples en no más de 40 palabras
 	Conserva el tono informativo e impersonal de la sección.
 	Omite información de poca relevancia, no incluyas información de otras secciones.
-	El formato de salida debe ser texto plano sin comillas en el ideoma original del artículo.
+	El formato de salida debe ser texto plano en el ideoma original del artículo.
 	Artículo: '''{section}'''
 	"""
 
