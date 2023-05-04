@@ -9,8 +9,8 @@ from vars import openai_key, notion_token, notion_database_id
 
 openai.api_key = openai_key
 
-concept = 'SQL'
-language = 'en'
+concept = 'Cadena de Márkov'
+language = 'es'
 
 categorias = pd.read_csv('resources/cat.csv', header=None, index_col=0).index.tolist()
 
@@ -47,7 +47,10 @@ def get_summary(page_name, summary, language = 'en'):
 	El formato de salida SIEMPRE debe ser JSON con los siguientes valores de llave:	[summary, category, keywords].
 	Artículo: '''{summary}'''
 	"""
-
+     
+	if len(prompt) > 20000:
+		prompt = prompt[:20000] + "'''"
+    
 	response = json.loads(get_completion(prompt))
 
 	return response['summary'], response['category'], response['keywords']
@@ -62,13 +65,16 @@ def get_section_summary(page_name, section, language = 'en'):
 	El formato de salida debe ser texto plano en el idioma '{language}' que es el mismo idioma del artículo.
 	Artículo: '''{section}'''
 	"""
+     
+	if len(prompt) > 20000:
+		prompt = prompt[:20000] + "'''"
 
 	response = get_completion(prompt)
 
 	return response
 
 def createPage(databaseID, headers, page_name, summary, url, sections, language):
-    """crea una página en una database de notion"""
+    """crea una página en una database de notion y pobla la página con los datos del artículo de wikipedia"""
     
     resumen, categoria, tags = get_summary(page_name, summary, language)
     
@@ -77,7 +83,7 @@ def createPage(databaseID, headers, page_name, summary, url, sections, language)
         "parent": { "database_id": databaseID },
         "object": "page",
         "properties": {
-            "Título": {
+            "Title": {
                 "title": [
                     {
                         "text": {
@@ -90,18 +96,18 @@ def createPage(databaseID, headers, page_name, summary, url, sections, language)
                     "multi_select":[
                     ]
                 },
-            "Categoría": {
+            "Category": {
                 "select": {
                     "name": categoria
                 }
             },
-            "Revisada": {
+            "Reviewed": {
                     "checkbox": False
                 },
             "URL": {
                 "url": url
             },
-            "Idioma": {
+            "Lan": {
 				"select": {
 					"name": str.upper(language)
 				}
