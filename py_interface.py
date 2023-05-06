@@ -9,7 +9,7 @@ from vars import openai_key, notion_token, notion_database_id
 
 openai.api_key = openai_key
 
-concept = 'Cadena de Márkov'
+concept = 'Fortnite'
 language = 'es'
 
 categorias = pd.read_csv('resources/cat.csv', header=None, index_col=0).index.tolist()
@@ -25,7 +25,7 @@ def get_completion(prompt, model="gpt-3.5-turbo", temperature=0):
     return response.choices[0].message["content"]
 
 def import_wiki_page(page_name , language = 'en'):
-	"""Importa una página de wikipedia"""
+	"""Importa una página de wikipedia, dado el nombre de la página y el idioma del artículo"""
 	wiki = wikipediaapi.Wikipedia(language)
 	page = wiki.page(page_name)
 	exists = page.exists()
@@ -35,7 +35,7 @@ def import_wiki_page(page_name , language = 'en'):
 	return page_name, exists, summary, url, sections
 
 def get_summary(page_name, summary, language = 'en'):
-	"""Trae summary de una página de wikipedia"""
+	"""Trae un summary del resumen de una página de wikipedia dada el nombre de la página, el texto del resumen y el idioma del artículo"""
 
 	prompt = f"""
 	Tu tarea es generar un resumen corto de un Artículo de wikipedia sobre {page_name} delimitado en triple comillas simples en no más de 40 palabras
@@ -56,7 +56,7 @@ def get_summary(page_name, summary, language = 'en'):
 	return response['summary'], response['category'], response['keywords']
 
 def get_section_summary(page_name, section, language = 'en'):
-	"""Trae summary de una sección de wikipedia"""
+	"""Trae summary de una sección de un artículo en wikipedia, dado el nombre de la página, el texto de la sección y el idioma del artículo"""
 	
 	prompt = f"""
 	Tu tarea es generar un resumen corto de una sección de un Artículo de wikipedia sobre {page_name} delimitada en triple comillas simples en no más de 40 palabras
