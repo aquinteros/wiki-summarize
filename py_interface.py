@@ -9,8 +9,8 @@ from vars import openai_key, notion_token, notion_database_id
 
 openai.api_key = openai_key
 
-concept = 'Fortnite'
-language = 'es'
+concept = 'Midjourney'
+language = 'en'
 
 categorias = pd.read_csv('resources/cat.csv', header=None, index_col=0).index.tolist()
 
@@ -197,13 +197,15 @@ def createPage(databaseID, headers, page_name, summary, url, sections, language)
     res_update = requests.request("PATCH", updateURL, headers=headers, data=data)
     print(res_update.status_code)
 
-headers = {
-    "Authorization": "Bearer " + notion_token,
-    "Content-Type": "application/json",
-    "Notion-Version": "2022-06-28"
-}
+if __name__ == '__main__':
 
-page_name, exists, summary, url, sections = import_wiki_page(concept, language)
+    headers = {
+        "Authorization": "Bearer " + notion_token,
+        "Content-Type": "application/json",
+        "Notion-Version": "2022-06-28"
+    }
 
-if exists:
-    createPage(notion_database_id, headers, page_name, summary, url, sections, language)
+    page_name, exists, summary, url, sections = import_wiki_page(concept, language)
+
+    if exists:
+        createPage(notion_database_id, headers, page_name, summary, url, sections, language)
