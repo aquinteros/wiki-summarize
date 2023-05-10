@@ -192,7 +192,7 @@ def createPage(databaseID, headers, page_name, summary, url, sections, language)
         updateURL = f'https://api.notion.com/v1/blocks/{newPageID}/children'
         res_update = requests.request("PATCH", updateURL, headers=headers, data=data)
         # return res_update.status_code, res_insert.status_code
-        return str(res_update.content)
+        return str(res_insert.status_code) + " " + str(res_update.status_code)
 
 def main(con, lan='en'):
 
