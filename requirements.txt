@@ -3,3 +3,4 @@ numpy
 wikipedia-api
 openai
 flask
+Gunicorn
