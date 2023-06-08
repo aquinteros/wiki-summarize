@@ -9,7 +9,8 @@ def run():
         # How to Use
         To use it, you must have an OpenAI account and an API key. \n
         You can get your api key from this URL: <https://platform.openai.com/account/api-keys> \n
-        Search the title of the Wikipedia article you want to summarize and click the "Import" button
+        Copy the URL of the Wikipedia article you want to summarize and click the "Summarize" button \n
+        You can later download the result in a markdown format \n
         """
     )
 
