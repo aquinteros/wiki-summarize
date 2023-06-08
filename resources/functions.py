@@ -83,7 +83,7 @@ def get_section_summary(page_name, section, model, language = 'en'):
 
     return response
 
-def return_summary(page_name, model, lan='en'):
+def return_summary(page_name, model, progress, lan='en'):
      
     page_name, exists, summary, url, sections = import_wiki_page(page_name, lan)
 
@@ -116,6 +116,7 @@ def return_summary(page_name, model, lan='en'):
             if section.title not in excluded_titles:
                 full_text += '## ' + section.title + '\n'
                 full_text += get_section_summary(page_name, section.full_text, model, lan) + '\n'
+            progress.progress(sections.index(section)/len(sections))
 
         full_text += '\n' + '``imported from wikipedia and summarized by openai``'
         
