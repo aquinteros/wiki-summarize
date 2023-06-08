@@ -40,7 +40,7 @@ def run():
     
     with st.sidebar:
         mention(
-            label="github-repo",
+            label="wiki-summarize",
             icon="github",
             url="https://github.com/aquinteros/wiki-summarize"
         )
