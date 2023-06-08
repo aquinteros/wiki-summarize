@@ -21,10 +21,11 @@ def run():
     )
     
     st.sidebar.markdown("""
-                        Got any questions? \n
-                        Email me at: <mailto:alvaro.quinteros.a@gmail.com> \n
-                        Or open a GitHub issue at: <https://github.com/aquinteros/wiki-summarize>
-                        """)
+        Got any questions? \n
+        Email me at: [alvaro.quinteros.a@gmail.com](mailto:alvaro.quinteros.a@gmail.com) \n
+        Or open a GitHub issue at: <https://github.com/aquinteros/wiki-summarize>
+        """
+    )
         
     st.title("Wiki Summary")
 
