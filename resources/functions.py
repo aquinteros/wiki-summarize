@@ -6,9 +6,9 @@ import requests
 import streamlit as st
 import time
 
-from vars import openai_key, notion_token, notion_database_id
+# from vars import openai_key, notion_token, notion_database_id
 
-openai.api_key = openai_key
+openai.api_key = st.secrets["openai_key"]
 
 categorias = pd.read_csv('resources/cat.csv', header=None, index_col=0).index.tolist()
 

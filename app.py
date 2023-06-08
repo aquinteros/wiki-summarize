@@ -9,7 +9,7 @@ def run():
     # }
     
     headers = {
-        "Authorization": st.secrets["api_key"],
+        "Authorization": st.secrets["openai_key"],
         "Content-Type": "application/json",
     }
 
