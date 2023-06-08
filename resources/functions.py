@@ -1,27 +1,37 @@
-
 import pandas as pd
 import wikipediaapi
 import openai
 import json
 import requests
+import streamlit as st
+import time
 
 from vars import openai_key, notion_token, notion_database_id
 
 openai.api_key = openai_key
 
-categorias = pd.read_csv('cat.csv', header=None, index_col=0).index.tolist()
+categorias = pd.read_csv('resources/cat.csv', header=None, index_col=0).index.tolist()
 
-def get_completion(prompt, model="gpt-3.5-turbo", temperature=0):
+st.set_page_config(page_title="Wiki Summary", page_icon="📚", initial_sidebar_state="collapsed")
+
+def get_completion(prompt, model="gpt-3.5-turbo", temperature=0, num_retries=5, sleep_time=90):
     """function to return content from the openai api prompt"""
     messages = [{"role": "user", "content": prompt}]
-    response = openai.ChatCompletion.create(
-        model=model,
-        messages=messages,
-        temperature=temperature, 
-    )
+    for i in range(num_retries):
+        try:
+            response = openai.ChatCompletion.create(
+                model=model,
+                messages=messages,
+                temperature=temperature,
+            )
+            break
+        except Exception as e:
+            print(f"Retry {i+1}/{num_retries} failed. Error: {e}")
+            time.sleep(sleep_time)
+		
     return response.choices[0].message["content"]
 
-def import_wiki_page(page_name , language = 'en'):
+def import_wiki_page(page_name, language = 'en'):
     """Importa una página de wikipedia, dado el nombre de la página y el idioma del artículo"""
     wiki = wikipediaapi.Wikipedia(language)
     page = wiki.page(page_name)
@@ -194,19 +204,54 @@ def createPage(databaseID, headers, page_name, summary, url, sections, language)
         # return res_update.status_code, res_insert.status_code
         return str(res_insert.status_code) + " " + str(res_update.status_code)
 
-def main(con, lan='en'):
+def flow_to_notion(page_name, headers, lan='en'):
+	"""Función que ejecuta el flujo completo para importar una página de wikipedia a Notion"""
+    
+	page_name, exists, summary, url, sections = import_wiki_page(page_name, lan)
 
-    headers = {
-    "Authorization": "Bearer " + notion_token,
-    "Content-Type": "application/json",
-    "Notion-Version": "2022-06-28"
-    }
+	if exists:
+		result = createPage(notion_database_id, headers, page_name, summary, url, sections, lan)
+	else:
+		result = "No existe la página"
 
-    page_name, exists, summary, url, sections = import_wiki_page(con, lan)
+	return result
+
+def return_summary(page_name, lan='en'):
+     
+    page_name, exists, summary, url, sections = import_wiki_page(page_name, lan)
 
     if exists:
-        result = createPage(notion_database_id, headers, page_name, summary, url, sections, lan)
-    else:
-        result = "No existe la página"
+        summary, category, keywords = get_summary(page_name, summary, lan)
 
-    return result
+        full_text = ''
+        
+        full_text += '# Summary' + '\n'
+
+        full_text += summary + '\n'
+
+        full_text += '# Category' + '\n'
+                
+        full_text += category + '\n'
+
+        full_text += '# Keywords' + '\n'
+
+        full_text += ', '.join(keywords) + '\n'
+
+        full_text += '# URL' + '\n'
+
+        full_text += '<' + url + '>' + '\n'
+
+        excluded_titles = ['Referencias', 'Véase también', 'Enlaces externos', 'Fuentes', 'Notas', 'Bibliografía', 'Notes', 'References', 'External links', 'See also', 'Further reading' ,'Sources']
+
+        full_text += '# Sections' + '\n'
+
+        for section in sections:
+            if section.title not in excluded_titles:
+                full_text += '## ' + section.title + '\n'
+                full_text += get_section_summary(page_name, section.full_text, lan) + '\n'
+
+        full_text += '\n' + '``imported from wikipedia and openai``'
+
+        return full_text
+    else:
+        return "No existe la página"
