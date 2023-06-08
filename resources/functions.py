@@ -7,6 +7,7 @@ import streamlit as st
 import time
 from streamlit_extras.colored_header import colored_header
 from streamlit_extras.buy_me_a_coffee import button
+from streamlit_extras.mention import mention
 
 st.set_page_config(page_title="Wiki Summary", page_icon="📚", initial_sidebar_state="expanded")
 

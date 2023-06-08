@@ -22,14 +22,28 @@ def run():
     
     st.sidebar.markdown("""
         Got any questions? \n
-        Email me at: [alvaro.quinteros.a@gmail.com](mailto:alvaro.quinteros.a@gmail.com) \n
-        Or open a GitHub issue at: <https://github.com/aquinteros/wiki-summarize>
+        Email me at: \n
         """
     )
+    
+    st.sidebar.mention(
+        label="alvaro.quinteros.a@gmail.com",
+        icon="📧",
+        url="mailto:alvaro.quinteros.a@gmail.com"
+    )
+    
+    st.sidebar.markdown("""
+        Or open an issue in the GitHub repo: \n
+        """
+    )  
+    
+    st.sidebar.mention(
+        label="github-repo",
+        icon="github",
+        url="https://github.com/aquinteros/wiki-summarize"
+    )
         
-    colored_header("Wiki Summary", color_name='blue-70')
-
-    st.text("Makes a summary of a Wikipedia article in a markdown format")
+    colored_header("Wiki Summary", color_name='blue-70', description="Summarize Wikipedia articles in a markdown format")
     
     button(username="aquinteros", floating=False, width=221)
 
@@ -50,7 +64,9 @@ def run():
         
         if api_key_input:
 
-            output = return_summary(page_name, model, language)
+            progress = st.progress(0)
+            
+            output = return_summary(page_name, model, progress, language)
 
             st.download_button('Download Markdown', output, page_name + ".md", "Download")
 
