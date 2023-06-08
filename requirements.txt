@@ -2,3 +2,5 @@ pandas
 numpy
 wikipedia-api
 openai
+streamlit
+streamlit_extras
