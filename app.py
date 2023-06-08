@@ -69,6 +69,8 @@ def run():
             progress = st.progress(0)
             
             output = return_summary(page_name, model, progress, language)
+            
+            progress.progress(100)
 
             st.download_button('Download Markdown', output, page_name + ".md", "Download")
 
