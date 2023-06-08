@@ -26,23 +26,25 @@ def run():
         """
     )
     
-    st.sidebar.mention(
-        label="alvaro.quinteros.a@gmail.com",
-        icon="📧",
-        url="mailto:alvaro.quinteros.a@gmail.com"
-    )
+    with st.sidebar:
+        mention(
+            label="alvaro.quinteros.a@gmail.com",
+            icon="📧",
+            url="mailto:alvaro.quinteros.a@gmail.com"
+        )
     
     st.sidebar.markdown("""
         Or open an issue in the GitHub repo: \n
         """
     )  
     
-    st.sidebar.mention(
-        label="github-repo",
-        icon="github",
-        url="https://github.com/aquinteros/wiki-summarize"
-    )
-        
+    with st.sidebar:
+        mention(
+            label="github-repo",
+            icon="github",
+            url="https://github.com/aquinteros/wiki-summarize"
+        )
+    
     colored_header("Wiki Summary", color_name='blue-70', description="Summarize Wikipedia articles in a markdown format")
     
     button(username="aquinteros", floating=False, width=221)
