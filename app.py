@@ -49,9 +49,12 @@ def run():
     
     button(username="aquinteros", floating=False, width=221)
 
-    page_name = st.text_input("Page Name")
-
-    language = st.selectbox("Lang", ['en', 'es'])
+    URL = st.text_input("URL")
+    
+    url_parse = urlparse(URL)
+    
+    page_name = url_parse.path.split('/')[-1]
+    language = url_parse.netloc.split('.')[0]
     
     model_list = []
     

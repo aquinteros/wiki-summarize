@@ -8,6 +8,7 @@ import time
 from streamlit_extras.colored_header import colored_header
 from streamlit_extras.buy_me_a_coffee import button
 from streamlit_extras.mention import mention
+from urllib.parse import urlparse
 
 st.set_page_config(page_title="Wiki Summary", page_icon="📚", initial_sidebar_state="expanded")
 
@@ -34,7 +35,7 @@ def get_completion(prompt, model="gpt-3.5-turbo", temperature=0, num_retries=5, 
 		
     return response.choices[0].message["content"]
 
-def import_wiki_page(page_name, language = 'en'):
+def import_wiki_page(page_name, language):
     """Importa una página de wikipedia, dado el nombre de la página y el idioma del artículo"""
     wiki = wikipediaapi.Wikipedia(language)
     page = wiki.page(page_name)
@@ -44,7 +45,7 @@ def import_wiki_page(page_name, language = 'en'):
     sections = page.sections
     return page_name, exists, summary, url, sections
 
-def get_summary(page_name, summary, model, language = 'en'):
+def get_summary(page_name, summary, model, language):
     """Trae un resumen del resumen de una página de wikipedia dada el nombre de la página, el texto del resumen y el idioma del artículo"""
 
     prompt = f"""
@@ -65,7 +66,7 @@ def get_summary(page_name, summary, model, language = 'en'):
 
     return response['summary'], response['category'], response['keywords']
 
-def get_section_summary(page_name, section, model, language = 'en'):
+def get_section_summary(page_name, section, model, language):
     """Trae summary de una sección de un artículo en wikipedia, dado el nombre de la página, el texto de la sección y el idioma del artículo"""
     
     prompt = f"""
@@ -83,12 +84,12 @@ def get_section_summary(page_name, section, model, language = 'en'):
 
     return response
 
-def return_summary(page_name, model, progress, lan='en'):
+def return_summary(page_name, model, progress, language):
      
-    page_name, exists, summary, url, sections = import_wiki_page(page_name, lan)
+    page_name, exists, summary, url, sections = import_wiki_page(page_name, language)
 
     if exists:
-        summary, category, keywords = get_summary(page_name, summary, model, lan)
+        summary, category, keywords = get_summary(page_name, summary, model, language)
 
         full_text = ''
         
@@ -115,7 +116,7 @@ def return_summary(page_name, model, progress, lan='en'):
         for section in sections:
             if section.title not in excluded_titles:
                 full_text += '## ' + section.title + '\n'
-                full_text += get_section_summary(page_name, section.full_text, model, lan) + '\n'
+                full_text += get_section_summary(page_name, section.full_text, model, language) + '\n'
             progress.progress(sections.index(section)/len(sections))
 
         full_text += '\n' + '``imported from wikipedia and summarized by openai``'
