@@ -27,9 +27,11 @@ def run():
         """
     )
         
-    st.title("Wiki Summary")
+    colored_header("Wiki Summary", color_name='blue-70')
 
     st.text("Makes a summary of a Wikipedia article in a markdown format")
+    
+    button(username="aquinteros", floating=False, width=221)
 
     page_name = st.text_input("Page Name")
 
