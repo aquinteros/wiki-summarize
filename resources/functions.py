@@ -18,10 +18,9 @@ def set_openai_api_key(api_key: str):
     try:
         st.session_state["OPENAI_API_KEY"] = api_key
         openai.api_key = st.session_state["OPENAI_API_KEY"]
+        return None
     except Exception as e:
-        st.error(f"Error: {e}")
-        # stop app
-        st.stop()
+        return e
 
 def get_completion(prompt, model="gpt-3.5-turbo", temperature=0, num_retries=5, sleep_time=90):
     """function to return content from the openai api prompt"""
