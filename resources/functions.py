@@ -18,7 +18,8 @@ def set_openai_api_key(api_key: str):
     try:
         st.session_state["OPENAI_API_KEY"] = api_key
         openai.api_key = st.session_state["OPENAI_API_KEY"]
-        return True
+        openai.Engine.list() # try connection
+        return 'OK'
     except Exception as e:
         return e
 

@@ -61,11 +61,10 @@ def run():
     
     if api_key_input:
         validation = set_openai_api_key(api_key_input)
-        if validation is True:
+        if validation == 'OK':
             models = pd.json_normalize(openai.Engine.list(), record_path=['data'])
             model_list = models[(models['owner'] == 'openai') & (models['ready'] == True)].id
         else:
-            st.error('API key is not valid')
             st.error(validation)
             st.stop()
     
