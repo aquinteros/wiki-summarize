@@ -26,8 +26,7 @@ def set_openai_api_key(api_key: str):
         st.error(e)
         return []
     
-
-def get_completion(prompt, model="gpt-3.5-turbo", temperature=0, num_retries=5, sleep_time=90):
+def get_completion(prompt, model="gpt-3.5-turbo", temperature=0, num_retries=5, sleep_time=10):
     """function to return content from the openai api prompt"""
     messages = [{"role": "user", "content": prompt}]
     for i in range(num_retries):
