@@ -23,7 +23,8 @@ def set_openai_api_key(api_key: str):
         model_list = models[(models['owner'] == 'openai') & (models['ready'] == True)].id
         return model_list
     except Exception as e:
-        return e
+        st.error(e)
+        return []
     
 
 def get_completion(prompt, model="gpt-3.5-turbo", temperature=0, num_retries=5, sleep_time=90):
