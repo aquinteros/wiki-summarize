@@ -48,7 +48,7 @@ def run():
     
     colored_header("Wiki Summary", color_name='blue-70', description="Summarize Wikipedia articles in a markdown format")
     
-    button(username="aquinteros", floating=False, width=221)
+    buy_me_a_coffee(username="aquinteros", floating=False, width=221)
     
     model_list = []
     
