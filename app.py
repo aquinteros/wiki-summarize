@@ -66,7 +66,6 @@ def run():
             model_list = models[(models['owner'] == 'openai') & (models['ready'] == True)].id
         else:
             st.error(validation)
-            st.stop()
     
     model = st.selectbox("Model", model_list, index=len(model_list)-1)
     
