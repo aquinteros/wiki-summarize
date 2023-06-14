@@ -14,6 +14,7 @@ st.set_page_config(page_title="Wiki Summary", page_icon="📚", initial_sidebar_
 
 categorias = pd.read_csv('resources/cat.csv', header=None, index_col=0).index.tolist()
 
+@st.cache_resource()
 def set_openai_api_key(api_key: str):
     try:
         st.session_state["OPENAI_API_KEY"] = api_key
