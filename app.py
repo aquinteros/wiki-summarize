@@ -49,23 +49,27 @@ def run():
     colored_header("Wiki Summary", color_name='blue-70', description="Summarize Wikipedia articles in a markdown format")
     
     button(username="aquinteros", floating=False, width=221)
-
-    URL = st.text_input("URL")
-    
-    url_parse = urlparse(URL)
-    
-    page_name = url_parse.path.split('/')[-1]
-    language = url_parse.netloc.split('.')[0]
     
     model_list = []
     
     if api_key_input:
         model_list = set_openai_api_key(api_key_input)
     
-    model = st.selectbox("Model", model_list, index=len(model_list)-1)
-    
-    if st.button("Summarize"):
+    with st.form(key='form_summarize'):
+
+        URL = st.text_input("URL")
         
+        url_parse = urlparse(URL)
+        
+        page_name = url_parse.path.split('/')[-1]
+        language = url_parse.netloc.split('.')[0]
+
+        model = st.selectbox("Model", model_list, index=len(model_list)-1)
+
+        form_submit_button = st.form_submit_button(label='Summarize')
+
+    if form_submit_button:
+
         if api_key_input:
 
             progress = st.progress(0)
