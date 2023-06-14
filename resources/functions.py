@@ -19,10 +19,12 @@ def set_openai_api_key(api_key: str):
     try:
         st.session_state["OPENAI_API_KEY"] = api_key
         openai.api_key = st.session_state["OPENAI_API_KEY"]
-        openai.Engine.list() # try connection
-        return 'OK'
+        models = pd.json_normalize(openai.Engine.list(), record_path=['data'])
+        model_list = models[(models['owner'] == 'openai') & (models['ready'] == True)].id
+        return model_list
     except Exception as e:
         return e
+    
 
 def get_completion(prompt, model="gpt-3.5-turbo", temperature=0, num_retries=5, sleep_time=90):
     """function to return content from the openai api prompt"""

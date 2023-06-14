@@ -60,12 +60,7 @@ def run():
     model_list = []
     
     if api_key_input:
-        validation = set_openai_api_key(api_key_input)
-        if validation == 'OK':
-            models = pd.json_normalize(openai.Engine.list(), record_path=['data'])
-            model_list = models[(models['owner'] == 'openai') & (models['ready'] == True)].id
-        else:
-            st.error(validation)
+        model_list = set_openai_api_key(api_key_input)
     
     model = st.selectbox("Model", model_list, index=len(model_list)-1)
     
