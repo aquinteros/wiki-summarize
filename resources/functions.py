@@ -94,6 +94,7 @@ def get_section_summary(page_name, section, model, language):
     return response
 
 def return_summary(page_name, model, progress, language):
+    """Trae un resumen de una página de wikipedia, dado el nombre de la página y el idioma del artículo"""
      
     page_name, exists, summary, url, sections = import_wiki_page(page_name, language)
 
@@ -128,7 +129,7 @@ def return_summary(page_name, model, progress, language):
                 full_text += get_section_summary(page_name, section.full_text, model, language) + '\n'
             progress.progress(sections.index(section)/len(sections))
 
-        full_text += '\n' + '``imported from wikipedia and summarized by openai``'
+        full_text += '\n' + '``imported from wikipedia and summarized by openai using https://wiki-summarize.streamlit.app/``'
         
         return full_text
     else:
