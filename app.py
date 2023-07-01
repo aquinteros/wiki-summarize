@@ -65,25 +65,23 @@ def run():
         language = url_parse.netloc.split('.')[0]
 
         model = st.selectbox("Model", model_list, index=len(model_list)-1)
+        
+        if st.form_submit_button(label='Summarize'):
 
-        form_submit_button = st.form_submit_button(label='Summarize')
+            if api_key_input:
 
-    if form_submit_button:
+                progress = st.progress(0)
+                
+                output = return_summary(page_name, model, progress, language)
+                
+                progress.progress(100)
 
-        if api_key_input:
+                st.download_button('Download Markdown', output, page_name + ".md", "Download")
 
-            progress = st.progress(0)
-            
-            output = return_summary(page_name, model, progress, language)
-            
-            progress.progress(100)
-
-            st.download_button('Download Markdown', output, page_name + ".md", "Download")
-
-            st.markdown(output)
-            
-        else:
-            st.error("Please enter your OpenAI API key")
+                st.markdown(output)
+                
+            else:
+                st.error("Please enter your OpenAI API key")
 
 if __name__ == "__main__":
     run()
