@@ -20,8 +20,7 @@ def set_openai_api_key(api_key: str):
         st.session_state["OPENAI_API_KEY"] = api_key
         openai.api_key = st.session_state["OPENAI_API_KEY"]
         models = pd.json_normalize(openai.Engine.list(), record_path=['data'])
-        model_list = models[(models['owner'] == 'openai') & (models['ready'] == True)].id
-        model_list = model_list[model_list['id'].str.contains('gpt')]
+        model_list = models[(models['owner'] == 'openai') & (models['ready'] == True) & (models['id'].str.contains('gpt'))].id
         return model_list
     except Exception as e:
         st.error(e)
