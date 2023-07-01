@@ -51,6 +51,7 @@ def run():
     buy_me_a_coffee(username="aquinteros", floating=False, width=221)
     
     model_list = []
+		submitted = 0
     
     if api_key_input:
         model_list = set_openai_api_key(api_key_input)
@@ -66,24 +67,23 @@ def run():
 
         model = st.selectbox("Model", model_list, index=len(model_list)-1)
 
-        form_submit_button = st.form_submit_button(label='Summarize')
-
-    if form_submit_button:
-
-        if api_key_input:
+        if st.form_submit_button(label='Summarize'):
+						
 
             progress = st.progress(0)
-            
+
             output = return_summary(page_name, model, progress, language)
-            
+
             progress.progress(100)
 
-            st.download_button('Download Markdown', output, page_name + ".md", "Download")
+							st.markdown(output)
+							
+							submitted = 1
 
-            st.markdown(output)
-            
-        else:
-            st.error("Please enter your OpenAI API key")
+    if submitted == 1:
+          
+       st.download_button('Download Markdown', output, page_name + ".md", "Download")
+
 
 if __name__ == "__main__":
     run()
