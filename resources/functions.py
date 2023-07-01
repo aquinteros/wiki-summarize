@@ -45,7 +45,8 @@ def get_completion(prompt, model="gpt-3.5-turbo", temperature=0, num_retries=5, 
 
 def import_wiki_page(page_name, language):
     """Importa una página de wikipedia, dado el nombre de la página y el idioma del artículo"""
-    wiki = wikipediaapi.Wikipedia(language)
+    headers = {'User-Agent': 'wiki-summarize/0.0 (https://wiki-summarize.streamlit.app/; alvaro.quinteros.a@gmail.com)'}
+    wiki = wikipediaapi.Wikipedia(language, headers=headers)
     page = wiki.page(page_name)
     exists = page.exists()
     summary = page.summary
