@@ -4,13 +4,13 @@ def run():
 
     st.sidebar.markdown("""
         # About
-        This app uses OpenAI's API to generate a summary of a Wikipedia article in a markdown format \n
-        Easy to ingest into your Notion Database, Obsidian Vault, or any other markdown editor \n
+        This app uses OpenAI's API to generate a summary of a Wikipedia article in a markdown format
+        Easy to ingest into your Notion Database, Obsidian Vault, or any other markdown editor
         # How to Use
-        To use it, you must have an OpenAI account and an API key. \n
-        You can get your api key from this URL: <https://platform.openai.com/account/api-keys> \n
-        Copy the URL of the Wikipedia article you want to summarize and click the "Summarize" button \n
-        You can later download the result in a markdown format \n
+        To use it, you must have an OpenAI account and an API key.
+        You can get your api key from this URL: <https://platform.openai.com/account/api-keys>
+        Copy the URL of the Wikipedia article you want to summarize and click the "Summarize" button
+        You can later download the result in a markdown format
         """
     )
 
