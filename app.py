@@ -51,7 +51,7 @@ def run():
     buy_me_a_coffee(username="aquinteros", floating=False, width=221)
     
     model_list = []
-		submitted = 0
+    submitted = 0
     
     if api_key_input:
         model_list = set_openai_api_key(api_key_input)
@@ -76,9 +76,9 @@ def run():
 
             progress.progress(100)
 
-							st.markdown(output)
-							
-							submitted = 1
+            st.markdown(output)
+            
+            submitted = 1
 
     if submitted == 1:
           

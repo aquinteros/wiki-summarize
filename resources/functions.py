@@ -129,7 +129,7 @@ def return_summary(page_name, model, progress, language):
                 full_text += get_section_summary(page_name, section.full_text, model, language) + '\n'
             progress.progress(sections.index(section)/len(sections))
 
-        full_text += '\n' + '``imported from wikipedia and summarized by openai using https://wiki-summarize.streamlit.app/``'
+        full_text += '\n' + '``imported from wikipedia and summarized by openai using <https://wiki-summarize.streamlit.app/>``'
         
         return full_text
     else:
